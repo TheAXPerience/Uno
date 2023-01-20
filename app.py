@@ -12,11 +12,9 @@ from colorama import Fore
 from unopackage.unomanager import UnoManager, MIN_UNO_PLAYERS, MAX_UNO_PLAYERS
 from unopackage.unocards import CardColor, CardValue, card_color_str, card_value_str
 
-# this may not be the best in terms of security but its the only way I can find to do this
-# just so I can hide who has what card
 
-
-def clear_terminal():
+# clears the terminal
+def clear_terminal() -> None:
     if osname == 'nt':
         # Windows
         system('cls')
@@ -25,7 +23,7 @@ def clear_terminal():
 
 
 # sets up UnoManager to start a game
-def setup_game():
+def setup_game() -> None:
     um = UnoManager()
 
     # Get number of players + names
@@ -68,7 +66,7 @@ def setup_game():
 
 
 # converts CardColor to Fore
-def card_color_to_fore_color(cc):
+def card_color_to_fore_color(cc: CardColor) -> Fore:
     if cc == CardColor.RED:
         return Fore.RED
     elif cc == CardColor.BLUE:
@@ -80,7 +78,8 @@ def card_color_to_fore_color(cc):
     return Fore.RESET
 
 
-def count_colors(hand):
+# returns the color that the given hand has the highest number of
+def count_colors(hand: list) -> CardColor:
     maxi = CardColor.RED
     colors = {CardColor.RED: 0, CardColor.GREEN: 0,
               CardColor.BLUE: 0, CardColor.YELLOW: 0, CardColor.NONE: 0}
@@ -90,10 +89,9 @@ def count_colors(hand):
             maxi = card.color
     return maxi if maxi != CardColor.NONE else CardColor.RED
 
+
 # main game loop
-
-
-def game_loop(uno_manager):
+def game_loop(uno_manager: UnoManager) -> None:
     winner = None
     message = ""
     uno_manager.start_game()
@@ -147,7 +145,9 @@ def game_loop(uno_manager):
         if uno_manager.is_player_cpu():
             choice = uno_manager.cpu_get_card_choice()
             uno = True
-            if choice != "draw":
+            if choice == -1:
+                choice = "draw"
+            else:
                 card, _ = hand[choice]
                 if card.is_wild():
                     color_choice = count_colors(hand)
@@ -212,6 +212,7 @@ def game_loop(uno_manager):
                     color_choice = card.color
                 break
 
+        # perform action
         if choice == "draw":
             # draw a card
             uno_manager.draw_card()
@@ -238,12 +239,13 @@ def game_loop(uno_manager):
                 message += f"The color was changed to {card_color_to_fore_color(color_choice)}{card_color_str(color_choice)}{Fore.RESET}.\n"
                 message += f"{Fore.MAGENTA}{uno_manager.get_current_name()}{Fore.RESET} drew 4 cards.\n"
 
+        # Proceed to next turn
         uno_manager.next_turn()
 
     print(f"\n{Fore.MAGENTA}{winner}{Fore.RESET} has won the game!")
 
 
-def main():
+def main() -> None:
     print(f"""Welcome to the game of {Fore.MAGENTA}Uno{Fore.RESET}!
 Place cards with either the same number or same color as the one on top of the pile.
 The first player to empty their hand wins.

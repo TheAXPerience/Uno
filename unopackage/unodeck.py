@@ -8,21 +8,21 @@ class UnoDeck:
         self.__deck__ = []
 
     # checks if the deck is empty
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return len(self.__deck__) == 0
 
     # draws a card from the deck
-    def draw_card(self):
+    def draw_card(self) -> UnoCard:
         if self.is_empty():
             return None
         return self.__deck__.pop()
 
     # shuffles the deck
-    def shuffle(self):
+    def shuffle(self) -> None:
         random.shuffle(self.__deck__)
 
     # adds cards to the deck
-    def refill(self, newcards):
+    def refill(self, newcards: list[UnoCard]) -> None:
         self.__deck__.extend(newcards)
 
 
@@ -34,28 +34,28 @@ class UnoPile:
         self.__cards__ = []
 
     # returns the color of the top card
-    def get_top_color(self):
+    def get_top_color(self) -> CardColor:
         return self.__top_color__
 
     # returns the value of the top card
-    def get_top_value(self):
+    def get_top_value(self) -> CardValue:
         return self.__top_value__
 
     # checks if a card can be placed on the pile
-    def placeable(self, card):
+    def placeable(self, card: UnoCard) -> bool:
         if card is None:
             return False
         return card.placeable(self.__top_color__, self.__top_value__)
 
     # places a card on top of the pile
-    def place_card(self, card, color, value):
+    def place_card(self, card: UnoCard, color: CardColor, value: CardValue) -> None:
         if card is not None:
             self.__top_value__ = value
             self.__top_color__ = color
             self.__cards__.append(card)
 
     # removes all but the top card of the pile and returns the rest
-    def get_discards(self):
+    def get_discards(self) -> list[UnoCard]:
         if len(self.__cards__) < 2:
             return []
         ret = self.__cards__[:-1]
@@ -64,7 +64,7 @@ class UnoPile:
 
 
 # builds a default Uno deck
-def build_deck():
+def build_deck() -> UnoDeck:
     deck = []
     # colors
     for i in range(1, 5):

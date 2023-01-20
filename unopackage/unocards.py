@@ -5,6 +5,7 @@ CardValue = Enum("CardValue", ["ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE", "S
                  "SEVEN", "EIGHT", "NINE", "DRAW_TWO", "SKIP", "REVERSE", "WILD", "WILD_DRAW_4", "NONE"])
 
 
+# converts CardValue to its string representation
 def card_value_str(cv):
     if cv == CardValue.ZERO:
         return "0"
@@ -43,6 +44,7 @@ def card_value_str(cv):
 CardColor = Enum("CardColor", ["RED", "BLUE", "GREEN", "YELLOW", "NONE"])
 
 
+# converts CardColor to its string representation
 def card_color_str(cc):
     if cc == CardColor.RED:
         return "Red"
@@ -57,20 +59,20 @@ def card_color_str(cc):
 
 # a card in the game of Uno
 class UnoCard():
-    def __init__(self, color, val):
+    def __init__(self, color: CardColor, val: CardValue):
         self.color = color
         self.value = val
 
     # returns True if the card is a Wild card
-    def is_wild(self):
+    def is_wild(self) -> bool:
         return self.value == CardValue.WILD or self.value == CardValue.WILD_DRAW_4
 
     # returns True if the card can be placed on top of the given card values
-    def placeable(self, top_of_pile_color, top_of_pile_value):
+    def placeable(self, top_of_pile_color: CardColor, top_of_pile_value: CardValue) -> bool:
         return self.color == top_of_pile_color or self.value == top_of_pile_value or self.is_wild()
 
     # ToString method
-    def __str__(self):
+    def __str__(self) -> str:
         color = card_color_str(self.color)
         val = card_value_str(self.value)
 
